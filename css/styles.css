@@ -1,0 +1,32 @@
+/* Utilitário para ocultar scrollbar na navegação horizontal */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Transições suaves para modais */
+#product-modal, #cart-drawer {
+    transition: opacity 0.25s ease-in-out;
+}
+
+#product-modal:not(.hidden), #cart-drawer:not(.hidden) {
+    opacity: 1;
+}
+
+/* Custom Scrollbar Interna */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: #121212;
+}
+::-webkit-scrollbar-thumb {
+    background: #2A2A2A;
+    border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #FF5722;
+}
