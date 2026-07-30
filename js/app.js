@@ -1,11 +1,12 @@
 /**
- * Módulo Principal da Aplicação
+ * Módulo Principal da Aplicação com Busca em Tempo Real e UX Refinada
  */
 class App {
     constructor() {
         this.selectedProduct = null;
         this.currentQty = 1;
         this.selectedExtras = [];
+        this.searchQuery = "";
     }
 
     init() {
@@ -20,7 +21,6 @@ class App {
         return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }
 
-    // Lógica para checar se a loja está aberta
     isStoreOpen() {
         const now = new Date();
         const dayOfWeek = now.getDay();
@@ -29,7 +29,6 @@ class App {
         if (!todaySchedule) return false;
 
         const currentMinutes = now.getHours() * 60 + now.getMinutes();
-
         const [openHour, openMin] = todaySchedule.open.split(':').map(Number);
         const [closeHour, closeMin] = todaySchedule.close.split(':').map(Number);
 
@@ -37,7 +36,6 @@ class App {
         const closeMinutes = closeHour * 60 + closeMin;
 
         if (closeMinutes < openMinutes) {
-            // Atendimento atravessa a meia-noite
             return currentMinutes >= openMinutes || currentMinutes <= closeMinutes;
         }
 
@@ -50,11 +48,11 @@ class App {
         
         if (statusContainer) {
             if (isOpen) {
-                statusContainer.className = "inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
-                statusContainer.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1 animate-pulse"></span> Aberto`;
+                statusContainer.className = "inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
+                statusContainer.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 animate-pulse"></span> Aberto`;
             } else {
-                statusContainer.className = "inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20";
-                statusContainer.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-rose-500 mr-1"></span> Fechado`;
+                statusContainer.className = "inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30";
+                statusContainer.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-rose-500 mr-1.5"></span> Fechado`;
             }
         }
     }
@@ -63,7 +61,6 @@ class App {
         const deliveryFields = document.getElementById('delivery-fields');
         if (!deliveryFields) return;
 
-        // Injeta o Select de Bairros e o Input de Endereço
         deliveryFields.innerHTML = `
             <select id="client-neighborhood" onchange="cart.updateDeliveryFee()" class="w-full bg-brand-dark border border-brand-border rounded-xl p-3 text-sm text-white focus:border-brand-orange focus:outline-none">
                 <option value="" disabled selected>Selecione seu Bairro *</option>
@@ -81,21 +78,47 @@ class App {
 
         categoriesContainer.innerHTML = categories.map((cat, index) => `
             <button onclick="app.filterCategory('${cat}')" 
-                class="px-4 py-2 rounded-xl text-xs font-bold transition-all border ${index === 0 ? 'bg-brand-orange text-white border-brand-orange shadow-md' : 'bg-brand-card text-gray-300 border-brand-border hover:border-gray-500'}">
+                class="px-4 py-2 rounded-xl text-xs font-bold transition-all border ${index === 0 ? 'bg-brand-orange text-white border-brand-orange shadow-md shadow-brand-orange/20' : 'bg-brand-card text-gray-300 border-brand-border hover:border-gray-500'}">
                 ${cat}
             </button>
         `).join('');
+    }
+
+    handleSearch() {
+        const input = document.getElementById('search-input');
+        this.searchQuery = input ? input.value.toLowerCase().trim() : "";
+        this.renderMenu();
     }
 
     renderMenu() {
         const menuSections = document.getElementById('menu-sections');
         const categories = [...new Set(PRODUCTS_DATA.map(p => p.category))];
 
+        let filteredProducts = PRODUCTS_DATA;
+        if (this.searchQuery) {
+            filteredProducts = PRODUCTS_DATA.filter(p => 
+                p.name.toLowerCase().includes(this.searchQuery) || 
+                p.description.toLowerCase().includes(this.searchQuery)
+            );
+        }
+
+        if (filteredProducts.length === 0) {
+            menuSections.innerHTML = `
+                <div class="text-center py-12 text-gray-400">
+                    <i class="fa-solid fa-magnifying-glass text-3xl mb-2 text-gray-500 opacity-50"></i>
+                    <p class="text-sm font-semibold">Nenhum lanche encontrado com esse nome.</p>
+                </div>
+            `;
+            return;
+        }
+
         menuSections.innerHTML = categories.map(cat => {
-            const products = PRODUCTS_DATA.filter(p => p.category === cat);
+            const products = filteredProducts.filter(p => p.category === cat);
+            if (products.length === 0) return '';
+
             return `
                 <div id="cat-${cat.replace(/[^a-zA-Z0-9]/g, '')}" class="space-y-3">
-                    <h2 class="text-base font-black text-white tracking-wide border-l-4 border-brand-orange pl-2 uppercase">${cat}</h2>
+                    <h2 class="text-base font-black text-white tracking-wide border-l-4 border-brand-orange pl-2 uppercase leading-none">${cat}</h2>
                     <div class="grid grid-cols-1 gap-3">
                         ${products.map(p => this.renderProductCard(p)).join('')}
                     </div>
@@ -104,19 +127,22 @@ class App {
         }).join('');
     }
 
+    // Card do Produto com CTA Solid e Maior Contraste
     renderProductCard(product) {
         return `
             <div class="bg-brand-card rounded-2xl p-3 border border-brand-border flex gap-3 shadow-md hover:border-brand-border/80 transition-all">
-                <img src="${product.image}" alt="${product.name}" class="w-24 h-24 rounded-xl object-cover bg-gray-800">
-                <div class="flex-1 flex flex-col justify-between">
+                <img src="${product.image}" alt="${product.name}" class="w-24 h-24 rounded-xl object-cover bg-gray-800 flex-shrink-0">
+                <div class="flex-1 flex flex-col justify-between min-w-0">
                     <div>
-                        <h3 class="font-bold text-white text-sm leading-tight">${product.name}</h3>
-                        <p class="text-xs text-gray-400 mt-1 line-clamp-2">${product.description}</p>
+                        <h3 class="font-bold text-white text-sm leading-snug truncate">${product.name}</h3>
+                        <p class="text-xs text-gray-300 mt-1 line-clamp-2 leading-relaxed">${product.description}</p>
                     </div>
-                    <div class="flex items-center justify-between mt-2">
-                        <span class="font-extrabold text-brand-yellow text-sm">${this.formatCurrency(product.price)}</span>
-                        <button onclick="app.openModal('${product.id}')" class="bg-brand-orange/10 hover:bg-brand-orange text-brand-orange hover:text-white border border-brand-orange/30 text-xs font-bold py-1.5 px-3 rounded-lg transition-all flex items-center gap-1">
-                            <i class="fa-solid fa-plus"></i> Adicionar
+                    <div class="flex items-center justify-between mt-2 pt-1">
+                        <span class="font-black text-brand-yellow text-sm tracking-tight">${this.formatCurrency(product.price)}</span>
+                        
+                        <!-- CTA Primário Solid com Feedback de Toque -->
+                        <button onclick="app.openModal('${product.id}')" class="bg-brand-orange hover:bg-orange-600 active:scale-95 text-white text-xs font-extrabold py-2 px-3.5 rounded-xl shadow-md shadow-brand-orange/20 transition-all flex items-center gap-1.5">
+                            <i class="fa-solid fa-plus text-[10px]"></i> Adicionar
                         </button>
                     </div>
                 </div>
@@ -152,7 +178,7 @@ class App {
             extrasContainer.classList.remove('hidden');
             extrasList.innerHTML = this.selectedProduct.extras.map(extra => `
                 <label class="flex items-center justify-between p-3 border border-brand-border rounded-xl bg-brand-dark cursor-pointer">
-                    <div class="flex items-center space-x-2">
+                    <div class="flex items-center space-x-2.5">
                         <input type="checkbox" value="${extra.id}" onchange="app.toggleExtra('${extra.id}')" class="accent-brand-orange w-4 h-4 rounded">
                         <span class="text-xs text-gray-200 font-medium">${extra.name}</span>
                     </div>

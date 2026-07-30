@@ -28,27 +28,26 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/styles.css">
 </head>
-<body class="bg-brand-dark text-gray-100 font-sans antialiased selection:bg-brand-orange selection:text-white pb-24">
+<body class="bg-brand-dark text-gray-100 font-sans antialiased selection:bg-brand-orange selection:text-white pb-28">
 
     <!-- HEADER FIXO -->
     <header class="fixed top-0 left-0 right-0 bg-brand-dark/95 backdrop-blur-md border-b border-brand-border z-40 px-4 py-3 shadow-lg">
         <div class="max-w-xl mx-auto flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-full bg-brand-orange text-white flex items-center justify-center font-black text-xl shadow-md">
+                <div class="w-10 h-10 rounded-full bg-brand-orange text-white flex items-center justify-center font-black text-xl shadow-md shadow-brand-orange/20">
                     101
                 </div>
                 <div>
-                    <h1 class="font-bold text-base leading-tight text-white">ROTA 101</h1>
+                    <h1 class="font-bold text-base leading-tight text-white tracking-wide">ROTA 101</h1>
                     <div class="flex items-center space-x-2 text-xs">
-                        <!-- Badge renderizado dinamicamente via JS -->
                         <span id="store-status-badge"></span>
-                        <span class="text-gray-400">Cidade Alta</span>
+                        <span class="text-gray-300 font-medium">Cidade Alta</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Botão Carrinho Fixo Header -->
-            <button id="cart-header-btn" onclick="cart.toggleDrawer()" class="relative p-2.5 rounded-xl bg-brand-card hover:bg-brand-border border border-brand-border transition-all">
+            <!-- Botão Carrinho Header -->
+            <button id="cart-header-btn" onclick="cart.toggleDrawer()" class="relative p-2.5 rounded-xl bg-brand-card hover:bg-brand-border border border-brand-border transition-all active:scale-95">
                 <i class="fa-solid fa-cart-shopping text-brand-yellow text-lg"></i>
                 <span id="cart-badge" class="absolute -top-1.5 -right-1.5 bg-brand-orange text-white text-[10px] font-extrabold w-5 h-5 rounded-full flex items-center justify-center border-2 border-brand-dark hidden">
                     0
@@ -59,8 +58,15 @@
 
     <main class="max-w-xl mx-auto pt-20 px-4">
         
+        <!-- BARRA DE BUSCA RÁPIDA (UX Melhorada) -->
+        <div class="mt-2 relative">
+            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+            <input type="text" id="search-input" oninput="app.handleSearch()" placeholder="Buscar lanche, bebida ou ingrediente..." 
+                class="w-full bg-brand-card border border-brand-border rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-gray-400 focus:border-brand-orange focus:outline-none shadow-inner transition-colors">
+        </div>
+
         <!-- NAVEGAÇÃO DE CATEGORIAS (Pills Roláveis) -->
-        <nav class="sticky top-[61px] bg-brand-dark z-30 pt-2 pb-3 -mx-4 px-4 overflow-x-auto no-scrollbar border-b border-brand-border/50">
+        <nav class="sticky top-[61px] bg-brand-dark z-30 pt-3 pb-3 -mx-4 px-4 overflow-x-auto no-scrollbar border-b border-brand-border/50">
             <div id="categories-container" class="flex space-x-2 whitespace-nowrap">
                 <!-- Categorias injetadas via JavaScript -->
             </div>
@@ -72,18 +78,17 @@
         </section>
     </main>
 
-    <!-- BARRA FLUTUANTE INFERIOR DO CARRINHO (Mobile CTA) -->
-    <div id="cart-bar" class="fixed bottom-0 left-0 right-0 bg-brand-card border-t border-brand-border p-4 z-40 transform translate-y-full transition-transform duration-300 shadow-2xl">
-        <div class="max-w-xl mx-auto flex items-center justify-between">
-            <div>
-                <span class="text-xs text-gray-400 block">Total sem taxa</span>
-                <span id="cart-bar-total" class="text-lg font-bold text-brand-yellow">R$ 0,00</span>
+    <!-- BARRA FLUTUANTE INFERIOR DO CARRINHO (Floating Pill CTA) -->
+    <div id="cart-bar" class="fixed bottom-4 left-4 right-4 z-40 transform translate-y-32 transition-transform duration-300 pointer-events-none">
+        <div class="max-w-md mx-auto bg-gradient-to-r from-brand-orange to-amber-600 text-white p-3.5 rounded-2xl shadow-2xl flex items-center justify-between cursor-pointer pointer-events-auto active:scale-98 border border-white/10" onclick="cart.toggleDrawer()">
+            <div class="flex items-center space-x-3 pl-1">
+                <span id="cart-bar-count" class="bg-white text-brand-orange font-black text-xs w-6 h-6 rounded-full flex items-center justify-center shadow-md">0</span>
+                <span class="font-extrabold text-sm tracking-wide">Ver Meu Pedido</span>
             </div>
-            <button onclick="cart.toggleDrawer()" class="bg-gradient-to-r from-brand-orange to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white font-bold py-2.5 px-6 rounded-xl flex items-center space-x-2 shadow-lg shadow-brand-orange/20 transition-all">
-                <span>Ver Carrinho</span>
-                <span id="cart-bar-count" class="bg-white/20 text-xs px-2 py-0.5 rounded-full">0</span>
-                <i class="fa-solid fa-arrow-right text-xs"></i>
-            </button>
+            <div class="flex items-center space-x-2 pr-1">
+                <span id="cart-bar-total" class="font-black text-base">R$ 0,00</span>
+                <i class="fa-solid fa-chevron-right text-xs"></i>
+            </div>
         </div>
     </div>
 
@@ -101,7 +106,7 @@
             <div class="p-4 overflow-y-auto space-y-4 flex-1">
                 <div>
                     <h2 id="modal-title" class="text-xl font-bold text-white"></h2>
-                    <p id="modal-desc" class="text-sm text-gray-400 mt-1"></p>
+                    <p id="modal-desc" class="text-sm text-gray-300 mt-1 leading-relaxed"></p>
                     <span id="modal-price" class="inline-block mt-2 font-extrabold text-brand-yellow text-lg"></span>
                 </div>
 
@@ -109,7 +114,7 @@
 
                 <!-- Adicionais -->
                 <div id="modal-extras-container" class="space-y-3">
-                    <h3 class="font-bold text-sm text-gray-200 uppercase tracking-wider">Adicionais Extras</h3>
+                    <h3 class="font-bold text-xs text-gray-300 uppercase tracking-wider">Adicionais Extras</h3>
                     <div id="modal-extras-list" class="space-y-2">
                         <!-- Lista dinâmica de extras -->
                     </div>
@@ -117,8 +122,8 @@
 
                 <!-- Observação do Item -->
                 <div class="space-y-2">
-                    <label class="font-bold text-sm text-gray-200 block">Observação do Item</label>
-                    <textarea id="modal-obs" rows="2" placeholder="Ex: Sem cebola, pão bem selado..." class="w-full bg-brand-dark border border-brand-border rounded-xl p-3 text-sm text-white focus:border-brand-orange focus:outline-none transition-colors placeholder:text-gray-600"></textarea>
+                    <label class="font-bold text-xs text-gray-300 uppercase tracking-wider block">Observação do Item</label>
+                    <textarea id="modal-obs" rows="2" placeholder="Ex: Sem cebola, pão bem selado..." class="w-full bg-brand-dark border border-brand-border rounded-xl p-3 text-sm text-white focus:border-brand-orange focus:outline-none transition-colors placeholder-gray-500"></textarea>
                 </div>
             </div>
 
@@ -129,7 +134,7 @@
                     <span id="modal-qty" class="w-8 text-center font-bold text-white">1</span>
                     <button onclick="app.incrementQty()" class="w-10 h-10 text-brand-orange font-bold text-lg hover:bg-brand-border/50 rounded-r-xl transition-colors">+</button>
                 </div>
-                <button id="modal-add-btn" class="flex-1 bg-brand-orange hover:bg-orange-600 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-between shadow-lg transition-colors">
+                <button id="modal-add-btn" class="flex-1 bg-brand-orange hover:bg-orange-600 active:scale-95 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-between shadow-lg transition-all">
                     <span>Adicionar</span>
                     <span id="modal-total-btn">R$ 0,00</span>
                 </button>
@@ -176,7 +181,6 @@
                         </label>
                     </div>
 
-                    <!-- Injetado dinamicamente via JS (select de bairros + input endereço) -->
                     <div id="delivery-fields" class="space-y-2"></div>
                 </div>
 
@@ -199,12 +203,11 @@
 
                 <!-- Resumo Financeiro -->
                 <div class="pt-2 border-t border-brand-border/50 space-y-1 text-sm">
-                    <div class="flex justify-between text-gray-400">
+                    <div class="flex justify-between text-gray-300">
                         <span>Subtotal</span>
                         <span id="drawer-subtotal">R$ 0,00</span>
                     </div>
 
-                    <!-- Linha dinâmica da Taxa de Entrega -->
                     <div id="drawer-delivery-fee-row" class="hidden"></div>
 
                     <div class="flex justify-between font-bold text-lg text-white pt-1">
@@ -213,7 +216,7 @@
                     </div>
                 </div>
 
-                <button onclick="cart.checkout()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold py-3.5 px-4 rounded-xl flex items-center justify-center space-x-2 shadow-lg shadow-emerald-900/30 transition-all text-base">
+                <button onclick="cart.checkout()" class="w-full bg-emerald-600 hover:bg-emerald-500 active:scale-98 text-white font-extrabold py-3.5 px-4 rounded-xl flex items-center justify-center space-x-2 shadow-lg shadow-emerald-900/30 transition-all text-base">
                     <i class="fa-brands fa-whatsapp text-xl"></i>
                     <span>Concluir Pedido no WhatsApp</span>
                 </button>

@@ -16,6 +16,14 @@
     opacity: 1;
 }
 
+/* Efeito de Clique Suave (Active State UX) */
+.active\:scale-95:active {
+    transform: scale(0.95);
+}
+.active\:scale-98:active {
+    transform: scale(0.98);
+}
+
 /* Custom Scrollbar Interna */
 ::-webkit-scrollbar {
     width: 6px;
