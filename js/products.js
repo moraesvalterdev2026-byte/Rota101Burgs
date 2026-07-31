@@ -116,7 +116,37 @@ const PRODUCTS_DATA = [
         name: "Coca-Cola Lata 350ml",
         price: 9.00,
         description: "Lata 350ml trincando de gelada.",
-        image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80",
+        image: "images/Coca Cola Lata 350ml.avif",
+        highlight: false,
+        extras: []
+    },
+    {
+        id: "b2",
+        category: "🥤 Bebidas",
+        name: "Coca-Cola Light 350ml",
+        price: 9.00,
+        description: "Lata 350ml sem açúcar, trincando de gelada.",
+        image: "images/Coca-Cola Light 350ml.avif",
+        highlight: false,
+        extras: []
+    },
+    {
+        id: "b3",
+        category: "🥤 Bebidas",
+        name: "Pepsi 350ml",
+        price: 8.50,
+        description: "Lata 350ml trincando de gelada.",
+        image: "images/Pepsi 350ml.avif",
+        highlight: false,
+        extras: []
+    },
+    {
+        id: "b4",
+        category: "🥤 Bebidas",
+        name: "Pepsi Cola Light 350ml",
+        price: 8.50,
+        description: "Lata 350ml zero açúcar, gelada.",
+        image: "images/Pepsi Cola Light 350ml.avif",
         highlight: false,
         extras: []
     },
