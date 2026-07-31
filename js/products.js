@@ -1,5 +1,5 @@
 /**
- * Configuração de Horários de Funcionamento, Taxas por Bairro e Cardápio
+ * Configuração de Horários de Funcionamento, Taxas por Bairro e Cardápio Completo
  */
 
 // Horários de Funcionamento (Horário de Brasília)
@@ -30,8 +30,9 @@ const STORE_CONFIG = {
     ]
 };
 
-// Base de Dados de Produtos com Imagens Locais (.avif)
+// Base de Dados de Produtos com 100% de Imagens Locais (.avif)
 const PRODUCTS_DATA = [
+    // 🍔 CATEGORIA: XIS 15CM
     {
         id: "x1",
         category: "🍔 Xis 15cm",
@@ -97,19 +98,48 @@ const PRODUCTS_DATA = [
             { id: "e3", name: "Pote Extra Maionese Verde 100g", price: 4.75 }
         ]
     },
+
+    // 🍟 CATEGORIA: ACOMPANHAMENTOS
     {
         id: "a1",
         category: "🍟 Acompanhamentos",
         name: "Batata Frita P Crocante",
         price: 13.00,
-        description: "150g de batata palito super crocante e sequinha.",
-        image: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80",
+        description: "Porção individual de 150g de batata palito super crocante e sequinha.",
+        image: "images/Batata Frita P.avif",
         highlight: false,
         extras: [
             { id: "e6", name: "Adicional de Cheddar Cremoso", price: 4.50 },
             { id: "e7", name: "Farofa de Bacon Extra", price: 4.00 }
         ]
     },
+    {
+        id: "a2",
+        category: "🍟 Acompanhamentos",
+        name: "Batata Frita G Especial",
+        price: 22.00,
+        description: "Porção generosa de 400g de batata palito crocante, ideal para compartilhar.",
+        image: "images/Batata Frita G.avif",
+        highlight: false,
+        extras: [
+            { id: "e6", name: "Adicional de Cheddar Cremoso", price: 5.00 },
+            { id: "e7", name: "Farofa de Bacon Extra", price: 5.00 }
+        ]
+    },
+    {
+        id: "a3",
+        category: "🍟 Acompanhamentos",
+        name: "Turbinar Batata G com Cheddar e Bacon",
+        price: 32.00,
+        description: "Porção de 400g de batata frita coberta com generosa camada de cheddar cremoso e muito bacon crocante.",
+        image: "images/Turbinar batata G com chedar e bacon.avif",
+        highlight: true,
+        extras: [
+            { id: "e3", name: "Pote Extra Maionese Verde 100g", price: 4.75 }
+        ]
+    },
+
+    // 🥤 CATEGORIA: BEBIDAS
     {
         id: "b1",
         category: "🥤 Bebidas",
@@ -150,13 +180,15 @@ const PRODUCTS_DATA = [
         highlight: false,
         extras: []
     },
+
+    // 🟢 CATEGORIA: MOLHOS EXTRAS
     {
         id: "m1",
         category: "🟢 Molhos Extras",
-        name: "Pote Extra Maionese Verde 100g",
+        name: "Pote de Maionese Artesanal da Casa (100g)",
         price: 4.75,
         description: "Nossa receita secreta artesanal de maionese verde com ervas finas.",
-        image: "https://images.unsplash.com/photo-1570197788417-0e82375c9371?auto=format&fit=crop&w=600&q=80",
+        image: "images/Pote de Maionese Artesanal da Casa (100g).avif",
         highlight: false,
         extras: []
     }
